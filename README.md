@@ -13,5 +13,4 @@ In this data set, there is detailed information of each city, state and region w
 Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cities-dataset
 
 # Schemas Roadmap
-(DB)
 ![MySQL_project1_schemas_diagram](MySQL_project1_schemas_diagram.png)
