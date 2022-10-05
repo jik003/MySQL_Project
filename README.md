@@ -1,5 +1,5 @@
 # MySQL project
-Authors: Wooyoung Jung and Jisu Kim
+Authors: Wooyoung Jeong and Jisu Kim
 
 # Research Questions
 1.
