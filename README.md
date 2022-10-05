@@ -14,3 +14,4 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 
 # Schemas Roadmap
 (DB)
+![MySQL_project1_schemas_diagram](MySQL_project1_schemas_diagram.png)
