@@ -21,7 +21,7 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 ```
 
 # Results
-<img src = "graph/Number of Countries in Latitude.png" width="200" height="200">
+<img src = "graph/Number of Countries in Latitude.png" width="1200" height="800">
 <img src = "graph/Number of States in Latitude.png" width=80% height=80%>
 <img src = "graph/Number of Cities in Latitude.png" width=80% height=80%>
 
