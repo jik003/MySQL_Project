@@ -16,8 +16,46 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 
 
 # MySQL code
+number of currency in ‘latitude’
 ```SQL
+WITH new_countries_currency AS
+	(SELECT currency, 
+	CASE 
+	WHEN latitude BETWEEN 66.56 AND 90 THEN 'Upper Arctic'
+            WHEN latitude BETWEEN 23.44 AND 66.56 THEN 'Arctic - Tropic of Cancer'
+            WHEN latitude BETWEEN 0 AND 23.44 THEN 'Tropic of Cancer - Equator'
+            WHEN latitude BETWEEN -23.44 AND 0 THEN 'Equator - Tropic of Capricorn'
+            WHEN latitude BETWEEN -66.56 AND -23.44 THEN 'Tropic of Capricorn - Antarctic'
+            WHEN latitude BETWEEN -90 AND -66.56 THEN 'Below Antarctic'
+            end sectioned_lat_range
+	FROM countries)
 
+SELECT currency, COUNT(currency) as num_currency, sectioned_lat_range
+FROM new_countries_currency
+WHERE sectioned_lat_range = '	‘
+GROUP BY currency  
+ORDER BY num_currency DESC
+```
+
+number of currency in ‘longitude’
+```SQL
+WITH new_countries_currency AS
+	(SELECT currency, 
+	CASE 
+	WHEN longitude BETWEEN 120 AND 180 THEN 'West 180 - West 120'
+            WHEN longitude BETWEEN 60 AND 120 THEN 'West 120 - West 60'
+            WHEN longitude BETWEEN 0 AND 60 THEN 'West 60 - Prime Meridian'
+            WHEN longitude BETWEEN -60 AND 0 THEN 'Prime Meridian - East 60'
+            WHEN longitude BETWEEN -120 AND -60 THEN 'East 60 - East 120'
+            WHEN longitude BETWEEN -180 AND -120 THEN 'East 120 - East 180'
+            end sectioned_lon_range
+	FROM countries)
+    
+SELECT currency, COUNT(currency) as num_currency, sectioned_lon_range
+FROM new_countries_currency
+WHERE sectioned_lon_range = '	'
+GROUP BY currency
+ORDER BY num_currency DESC
 ```
 
 # Results
@@ -56,7 +94,7 @@ The ratio graph shows exactly same pattern with latitude ratio graph. If there a
 For frequently used currency graph, it shows slightly different analysis compare to frequqently used currency graph for latitude. Because there are big difference in climate even in same area of longitude, there are many different types of currency compare to divided regions in latitude. Also, exrtremely high priority of EURO is observed in the area between Prime Meridian and East 60.
 
 # Discussion
-## Limitations
+Limitations
 1. It was unable to analyze the language of each country because the language column was written in origina language. If we can find other dataset that has english language names, it will be very helpful.
 2. Since the population of the countries show very important characteriestics, deeper analysis will be available with extra data set with population. 
 
