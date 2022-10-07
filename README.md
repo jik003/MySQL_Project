@@ -16,7 +16,7 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 
 
 # MySQL code
-number of currency in ‘latitude’
+number of currency in 'latitude'
 ```SQL
 WITH new_countries_currency AS
 	(SELECT currency, 
@@ -32,12 +32,12 @@ WITH new_countries_currency AS
 
 SELECT currency, COUNT(currency) as num_currency, sectioned_lat_range
 FROM new_countries_currency
-WHERE sectioned_lat_range = '	‘
+WHERE sectioned_lat_range = '	'
 GROUP BY currency  
 ORDER BY num_currency DESC
 ```
 
-number of currency in ‘longitude’
+number of currency in 'longitude'
 ```SQL
 WITH new_countries_currency AS
 	(SELECT currency, 
