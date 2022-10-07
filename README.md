@@ -22,22 +22,22 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 
 # Results
 <img src = "graph/Number of Countries in Latitude.png" width=80% height=60%>
-<img src = "graph/Number of States in Latitude.png" width="1000" height="700">
-<img src = "graph/Number of Cities in Latitude.png" width="1000" height="700">
+<img src = "graph/Number of States in Latitude.png" width=80% height=60%>
+<img src = "graph/Number of Cities in Latitude.png" width=80% height=60%>
 
-<img src = "graph/Ratio of Countries, States, and Cities in Latitude.png" width="1000" height="700">
+<img src = "graph/Ratio of Countries, States, and Cities in Latitude.png" width="1000" height="500">
 
-<img src = "graph/Frequency of Currency per the Area of Latitude.png" width="1000" height="700">
-
-
+<img src = "graph/Frequency of Currency per the Area of Latitude.png" width="1000" height="500">
 
 
-<img src = "graph/Number of Countries in Longitude.png" width="1000" height="700">
-<img src = "graph/Number of States in Longitude.png" width="1000" height="700">
-<img src = "graph/Number of Cities in Longitude.png" width="1000" height="700">
 
-<img src = "graph/Ratio of Countries, States, and Cities in Longitude.png" width="1000" height="700">
 
-<img src = "graph/Frequency of Currency per the Area of Longitude.png" width="1000" height="700">
+<img src = "graph/Number of Countries in Longitude.png" width=80% height=60%>
+<img src = "graph/Number of States in Longitude.png" width=80% height=60%>
+<img src = "graph/Number of Cities in Longitude.png" width=80% height=60%>
+
+<img src = "graph/Ratio of Countries, States, and Cities in Longitude.png" width="1000" height="500">
+
+<img src = "graph/Frequency of Currency per the Area of Longitude.png" width="1000" height="500">
 
 
