@@ -55,7 +55,8 @@ The ratio graph shows exactly same pattern with latitude ratio graph. If there a
 
 For frequently used currency graph, it shows slightly different analysis compare to frequqently used currency graph for latitude. Because there are big difference in climate even in same area of longitude, there are many different types of currency compare to divided regions in latitude. Also, exrtremely high priority of EURO is observed in the area between Prime Meridian and East 60.
 
-# Future Work
-- It was unable to analyze the language of each country because the language column was written in origina language. If we can find other dataset that has english language names, it will be very helpful.
-- Since the population of the countries show very important characteriestics, deeper analysis will be available with extra data set with population. 
+# Discussion
+## Limitations
+1. It was unable to analyze the language of each country because the language column was written in origina language. If we can find other dataset that has english language names, it will be very helpful.
+2. Since the population of the countries show very important characteriestics, deeper analysis will be available with extra data set with population. 
 
