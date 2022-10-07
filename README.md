@@ -22,4 +22,4 @@ Dataset: 🌍https://www.kaggle.com/datasets/tanweerulhaque/countries-states-cit
 ```
 
 # Results
-![Frequency of Currency per the Area of Latitude](Frequency of Currency per the Area of Latitude.png)
+![graph/Frequency of Currency per the Area of Latitude](graph/Frequency of Currency per the Area of Latitude.png)
