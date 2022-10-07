@@ -45,8 +45,17 @@ Becuase most cultural development through eras grew together in similar latitude
 <img src = "graph/Number of States in Longitude.png" width=80% height=60%>
 <img src = "graph/Number of Cities in Longitude.png" width=80% height=60%>
 
+In longitude, the area between Prime Memridian and East 60 has very large portion of all countries, states and cities. It has very close relationship with the history of the world. Since the South America, Africa, and Middle East Asia were very closely related with imperialism of Europe, all longitude region that contains those 3 areas have very large portion of data.
+
 <img src = "graph/Ratio of Countries, States, and Cities in Longitude.png" width="1000" height="500">
+
+The ratio graph shows exactly same pattern with latitude ratio graph. If there are large portion of land in the area, it is more likekly to have big difference between the number of cities per number of states and number of states per number of countries. 
 
 <img src = "graph/Frequency of Currency per the Area of Longitude.png" width="1000" height="400">
 
+For frequently used currency graph, it shows slightly different analysis compare to frequqently used currency graph for latitude. Because there are big difference in climate even in same area of longitude, there are many different types of currency compare to divided regions in latitude. Also, exrtremely high priority of EURO is observed in the area between Prime Meridian and East 60.
+
+# Future Work
+- It was unable to analyze the language of each country because the language column was written in origina language. If we can find other dataset that has english language names, it will be very helpful.
+- Since the population of the countries show very important characteriestics, deeper analysis will be available with extra data set with population. 
 
