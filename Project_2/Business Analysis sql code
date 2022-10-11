@@ -1,0 +1,225 @@
+-- customer from different states
+SELECT state, COUNT(customerid) as num_customer
+FROM customer
+GROUP BY state
+ORDER BY num_customer DESC;
+
+--
+SELECT state, COUNT(customerid) as num_customer, COUNT(s.sale_id) as num_order, SUM(si.sale_price) as total_price, SUM(si.sale_price)/COUNT(s.sale_id) as price_per_order
+FROM customer c JOIN sale s 
+	ON c.customerid = s.customer_id
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+GROUP BY state
+ORDER BY num_customer DESC;
+
+-- number of sale per customer
+SELECT c.firstname, c.lastname, c.customerid, COUNT(s.sale_id) as num_sale
+from customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY c.customerid
+ORDER BY num_sale DESC;
+
+-- customer with most recent order
+SELECT c.firstname, c.lastname, MAX(s.sale_date) as recent_order
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY c.customerid
+ORDER BY recent_order DESC;
+
+
+-- customer with items with tax
+SELECT firstname, lastname, count(sale_id) as num_order
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+WHERE s.tax != 0
+GROUP BY c.customerid
+ORDER BY num_order DESC;
+
+-- Avg shipping price per state
+SELECT c.state, AVG(s.shipping) as avg_shipping_price
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY state;
+
+-- SALE sale per month
+SELECT MONTHNAME(sale_date), count(sale_id)
+FROM sale
+GROUP BY MONTHNAME(sale_date);
+
+
+
+-- SALEITEM, PRODUCT most ordered product
+SELECT p.productname, COUNT(s.sale_id) as num_sale
+FROM sale_item s JOIN product p
+	ON s.product_id = p.productid
+GROUP BY s.product_id
+ORDER BY num_sale DESC;
+
+-- CUSTOMER, SALE, SALEITEM customer who spent most money
+SELECT c.firstname, c.lastname, SUM(si.sale_price) as total_purchased_price
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id 
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY total_purchased_price DESC;
+
+
+
+
+
+-- CUSTOMER, SALE, SALEITEM, PRODUCT customer with colors
+SELECT p.color, COUNT(s.sale_id) as num_sale
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id 
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+    JOIN product p
+    ON si.product_id = p.productid
+GROUP BY p.color
+ORDER BY num_sale DESC;
+
+-- manufacturer with most sold item
+SELECT m.manufacturername, COUNT(s.sale_id) num_sale
+FROM sale s JOIN sale_item si
+	on s.sale_id = si.sale_id
+    JOIN product p
+    ON si.product_id = p.productid
+    JOIN manufacturer m
+    ON p.manufactuerid = m.manufacturerid
+GROUP BY m.manufacturername
+ORDER BY num_sale DESC;
+
+-- employee who puchased most
+SELECT 
+	employee.employeeid, COUNT(purchase_id) as num_purchased
+FROM employee
+JOIN purchase ON employee.employeeid = purchase.employee_id
+GROUP BY employee.employeeid
+ORDER BY COUNT(purchase_id) DESC;
+
+-- most purchased item
+SELECT 
+	pi.product_id, COUNT(p.purchase_id) as num_purchased
+FROM purchase p JOIN purchase_item pi 
+	ON p.purchase_id = pi.purchase_id
+GROUP BY pi.product_id
+ORDER BY COUNT(pi.purchase_id) DESC;
+
+
+-- CUSTOMER LEVEL FUNCTION
+DELIMITER $$ 
+
+CREATE FUNCTION CUSTOMERGRADE(
+	total_purchased_price DECIMAL(10,2)
+    )
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+	DECLARE customergrade VARCHAR(20);
+    If total_purchased_price > 1500 THEN
+		SET customergrade = 'A';
+	ELSEIF (total_purchased_price <= 1500 AND
+				total_purchased_price > 1000) THEN
+		SET customergrade = 'B';
+	ELSEIF total_purchased_price <= 1000 THEN
+		SET customergrade = 'C';
+	END IF;
+		RETURN (customergrade);
+END $$
+DELIMITER ;
+
+-- grade of customer
+SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+FROM customer c JOIN sale s
+		ON c.customerid = s.customer_id 
+		JOIN sale_item si
+		ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY customlevel;
+
+-- Customer population
+
+WITH customgrade as (SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+FROM customer c JOIN sale s
+		ON c.customerid = s.customer_id 
+		JOIN sale_item si
+		ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY customlevel)
+SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl
+FROM customgrade
+GROUP BY customlevel;
+
+
+
+-- Employee in purchasing department
+WITH emp as (SELECT 
+	employee.employeeid, COUNT(purchase_id)
+FROM employee
+JOIN purchase ON employee.employeeid = purchase.employee_id
+GROUP BY employee.employeeid
+ORDER BY COUNT(purchase_id) DESC)
+SELECT CONCAT(e.firstname, ' ', e.lastname) as name, e.employeeid, IF(em.employeeid IS NULL, 'NO', 'YES') as purchasing_employee
+FROM emp em RIGHT JOIN employee e
+	ON em.employeeid = e.employeeid
+ORDER BY purchasing_employee DESC;
+
+-- Sale seaon function
+Delimiter $$
+CREATE FUNCTION SALE_SEASON(
+	MONTH VARCHAR(20)
+    ) 
+RETURNS varchar(20)
+DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
+DELIMITER ;
+
+-- sale season code
+SELECT p.category, COUNT(p.category) as num_sale
+FROM sale_item si
+JOIN sale s 
+	ON si.sale_id = s.sale_id
+JOIN product p 
+	ON si.product_id = p.productid
+WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = 'Winter'
+GROUP BY p.category
+
+
+-- Stored procedure to get recen_order, total_purchased_price, and customlevel for written name
+CREATE DEFINER=`root`@`localhost` PROCEDURE `customer_info`(    
+	IN first_name VARCHAR(255),
+    IN last_name VARCHAR(255))
+BEGIN
+    -- getting customer grade by using function
+
+    SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		MAX(s.sale_date) as recent_order,
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+	FROM customer c JOIN sale s
+			ON c.customerid = s.customer_id 
+			JOIN sale_item si
+			ON s.sale_id = si.sale_id
+	WHERE c.lastname = last_name AND c.firstname = first_name
+	GROUP BY c.customerid;
+    
+    
+END
