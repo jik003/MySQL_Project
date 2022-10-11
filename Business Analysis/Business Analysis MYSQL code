@@ -4,7 +4,7 @@ FROM customer
 GROUP BY state
 ORDER BY num_customer DESC;
 
---
+-- states' number of customers,orders and price per order
 SELECT state, COUNT(customerid) as num_customer, COUNT(s.sale_id) as num_order, SUM(si.sale_price) as total_price, SUM(si.sale_price)/COUNT(s.sale_id) as price_per_order
 FROM customer c JOIN sale s 
 	ON c.customerid = s.customer_id
@@ -42,21 +42,21 @@ FROM customer c JOIN sale s
 	ON c.customerid = s.customer_id
 GROUP BY state;
 
--- SALE sale per month
-SELECT MONTHNAME(sale_date), count(sale_id)
+--orders per month
+SELECT MONTHNAME(sale_date), count(sale_id) as order
 FROM sale
 GROUP BY MONTHNAME(sale_date);
 
 
 
--- SALEITEM, PRODUCT most ordered product
+-- most ordered product
 SELECT p.productname, COUNT(s.sale_id) as num_sale
 FROM sale_item s JOIN product p
 	ON s.product_id = p.productid
 GROUP BY s.product_id
 ORDER BY num_sale DESC;
 
--- CUSTOMER, SALE, SALEITEM customer who spent most money
+-- customer who spent most money
 SELECT c.firstname, c.lastname, SUM(si.sale_price) as total_purchased_price
 FROM customer c JOIN sale s
 	ON c.customerid = s.customer_id 
@@ -69,7 +69,7 @@ ORDER BY total_purchased_price DESC;
 
 
 
--- CUSTOMER, SALE, SALEITEM, PRODUCT customer with colors
+-- customer with colors
 SELECT p.color, COUNT(s.sale_id) as num_sale
 FROM customer c JOIN sale s
 	ON c.customerid = s.customer_id 
