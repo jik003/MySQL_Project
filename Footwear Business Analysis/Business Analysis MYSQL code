@@ -1,0 +1,360 @@
+-- customer from different states
+SELECT state, COUNT(customerid) as num_customer
+FROM customer
+GROUP BY state
+ORDER BY num_customer DESC;
+
+-- city where employees live
+SELECT city, COUNT(city) as num_emp
+FROM employee
+GROUP BY city
+ORDER BY num_emp DESC;
+
+-- number of city where employees live
+SELECT COUNT(DISTINCT(city)) as num_city
+FROM employee;
+
+-- employee hiring trend per year
+SELECT YEAR(hiredate) as year, COUNT(employeeid) as num_emp
+FROM employee
+GROUP BY YEAR(hiredate)
+ORDER BY hiredate;
+
+
+-- items which are not in inventory
+SELECT * 
+FROM inventoryitem
+WHERE qtyonhand = 0;
+
+-- ratio of items are not in inventory
+SELECT (SELECT COUNT(productid) as s FROM inventoryitem WHERE qtyonhand = 0)/ COUNT(productid) as ratio_0_qty_item 
+FROM inventoryitem;
+
+-- inventory item 
+SELECT COUNT(productid) as num_0_qty
+FROM inventoryitem
+WHERE qtyonhand = 0;
+
+-- number of different size
+SELECT COUNT(DISTINCT(itemsize)) as num_size
+FROM inventoryitem;
+
+-- number of manufacturers
+SELECT count(manufacturerid) as num_man
+FROM manufacturer;
+
+-- number of total product
+SELECT COUNT(productid)
+FROM product;
+
+-- item based on gender
+SELECT gender, COUNT(productid) num_product
+FROM product
+GROUP BY gender;
+
+-- item based on category
+SELECT category, COUNT(productid) as num_product
+FROM product
+GROUP BY category
+ORDER BY num_product DESC;
+
+-- average shipping price
+SELECT avg(shipping)
+FROM purchase;
+
+
+-- number of purchase per year
+SELECT YEAR(purchase_date) as year , COUNT(purchase_id) num_purchased
+FROM purchase
+GROUP BY YEAR(purchase_date)
+ORDER BY purchase_date;   
+
+-- most purchased manufacuteres
+SELECT manufacturer_id, count(purchase_id) as num_purchased
+FROM purchase
+GROUP BY manufacturer_id
+ORDER BY num_purchased DESC;
+
+-- total number of purchase
+SELECT COUNT(purchase_id) as num_purhcased
+FROM purchase_item;
+
+-- most purchased product
+SELECT product_id, COUNT(purchase_id) as num_purchased
+FROM purchase_item
+GROUP BY product_id
+ORDER BY num_purchased DESC;
+
+-- average quantity of purchased product
+SELECT AVG(quantity) as average_qty_purchased
+FROM purchase_item;
+
+-- number of sale per year
+SELECT YEAR(sale_date) as year, COUNT(sale_id) num_sale
+FROM sale
+GROUP BY YEAR(sale_date)
+ORDER BY sale_date;
+
+-- average sale price
+SELECT avg(sale_price) as avg_price, MIN(sale_price) as lowest_price, Max(sale_price) as highest_price
+FROM sale_item;
+
+-- states' number of customers,orders and price per order
+SELECT state, COUNT(customerid) as num_customer, COUNT(s.sale_id) as num_order, SUM(si.sale_price) as total_price, SUM(si.sale_price)/COUNT(s.sale_id) as price_per_order
+FROM customer c JOIN sale s 
+	ON c.customerid = s.customer_id
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+GROUP BY state
+ORDER BY num_customer DESC;
+
+-- number of sale per customer
+SELECT c.firstname, c.lastname, c.customerid, COUNT(s.sale_id) as num_sale
+from customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY c.customerid
+ORDER BY num_sale DESC;
+
+-- customer with most recent order
+SELECT c.firstname, c.lastname, MAX(s.sale_date) as recent_order
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY c.customerid
+ORDER BY recent_order DESC;
+
+
+-- customer with items with tax
+SELECT firstname, lastname, count(sale_id) as num_order
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+WHERE s.tax != 0
+GROUP BY c.customerid
+ORDER BY num_order DESC;
+
+-- Avg shipping price per state
+SELECT c.state, AVG(s.shipping) as avg_shipping_price
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id
+GROUP BY state;
+
+--orders per month
+SELECT MONTHNAME(sale_date), count(sale_id) as order
+FROM sale
+GROUP BY MONTHNAME(sale_date);
+
+
+
+-- most ordered product
+SELECT p.productname, COUNT(s.sale_id) as num_sale
+FROM sale_item s JOIN product p
+	ON s.product_id = p.productid
+GROUP BY s.product_id
+ORDER BY num_sale DESC;
+
+-- customer who spent most money
+SELECT c.firstname, c.lastname, SUM(si.sale_price) as total_purchased_price
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id 
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY total_purchased_price DESC;
+
+
+
+
+
+-- customer with colors
+SELECT p.color, COUNT(s.sale_id) as num_sale
+FROM customer c JOIN sale s
+	ON c.customerid = s.customer_id 
+    JOIN sale_item si
+    ON s.sale_id = si.sale_id
+    JOIN product p
+    ON si.product_id = p.productid
+GROUP BY p.color
+ORDER BY num_sale DESC;
+
+-- manufacturer with most sold item
+SELECT m.manufacturername, COUNT(s.sale_id) num_sale
+FROM sale s JOIN sale_item si
+	on s.sale_id = si.sale_id
+    JOIN product p
+    ON si.product_id = p.productid
+    JOIN manufacturer m
+    ON p.manufactuerid = m.manufacturerid
+GROUP BY m.manufacturername
+ORDER BY num_sale DESC;
+
+-- employee who puchased most
+SELECT 
+	employee.employeeid, COUNT(purchase_id) as num_purchased
+FROM employee
+JOIN purchase ON employee.employeeid = purchase.employee_id
+GROUP BY employee.employeeid
+ORDER BY COUNT(purchase_id) DESC;
+
+-- most purchased item
+SELECT 
+	pi.product_id, COUNT(p.purchase_id) as num_purchased
+FROM purchase p JOIN purchase_item pi 
+	ON p.purchase_id = pi.purchase_id
+GROUP BY pi.product_id
+ORDER BY COUNT(pi.purchase_id) DESC;
+
+
+-- CUSTOMER LEVEL FUNCTION
+DELIMITER $$ 
+
+CREATE FUNCTION CUSTOMERGRADE(
+	total_purchased_price DECIMAL(10,2)
+    )
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+	DECLARE customergrade VARCHAR(20);
+    If total_purchased_price > 1500 THEN
+		SET customergrade = 'A';
+	ELSEIF (total_purchased_price <= 1500 AND
+				total_purchased_price > 1000) THEN
+		SET customergrade = 'B';
+	ELSEIF total_purchased_price <= 1000 THEN
+		SET customergrade = 'C';
+	END IF;
+		RETURN (customergrade);
+END $$
+DELIMITER ;
+
+-- Customer population and each cutomer level's ratio in total purchase
+
+WITH customgrade as (SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+FROM customer c JOIN sale s
+		ON c.customerid = s.customer_id 
+		JOIN sale_item si
+		ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY customlevel)
+
+SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl, 
+    SUM(total_purchased_price) as total_price, 
+    SUM(total_purchased_price)/(SELECT SUM(sale_price) as s FROM sale_item) * 100 as ratio
+FROM customgrade
+Group by customlevel;
+
+
+-- Employee in purchasing department
+WITH emp as (SELECT 
+	employee.employeeid, COUNT(purchase_id)
+FROM employee
+JOIN purchase ON employee.employeeid = purchase.employee_id
+GROUP BY employee.employeeid
+ORDER BY COUNT(purchase_id) DESC)
+SELECT CONCAT(e.firstname, ' ', e.lastname) as name, e.employeeid, IF(em.employeeid IS NULL, 'NO', 'YES') as purchasing_employee
+FROM emp em RIGHT JOIN employee e
+	ON em.employeeid = e.employeeid
+ORDER BY purchasing_employee DESC;
+
+-- Sale seaon function
+Delimiter $$
+CREATE FUNCTION SALE_SEASON(
+	MONTH VARCHAR(20)
+    ) 
+RETURNS varchar(20)
+DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
+DELIMITER ;
+
+-- sale season code
+SELECT p.category, COUNT(p.category) as num_sale
+FROM sale_item si
+JOIN sale s 
+	ON si.sale_id = s.sale_id
+JOIN product p 
+	ON si.product_id = p.productid
+WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = 'Winter'
+GROUP BY p.category
+
+
+-- Stored procedure to get recen_order, total_purchased_price, and customlevel for written name
+CREATE DEFINER=`root`@`localhost` PROCEDURE `customer_info`(    
+	IN first_name VARCHAR(255),
+    IN last_name VARCHAR(255))
+BEGIN
+    -- getting customer grade by using function
+
+    SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		MAX(s.sale_date) as recent_order,
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+	FROM customer c JOIN sale s
+			ON c.customerid = s.customer_id 
+			JOIN sale_item si
+			ON s.sale_id = si.sale_id
+	WHERE c.lastname = last_name AND c.firstname = first_name
+	GROUP BY c.customerid;
+    
+    
+END
+
+-- customer with order date (sort)
+SELECT *
+FROM customer 
+INNER JOIN sale ON customer.customerid = sale.customer_id
+ORDER BY sale.sale_date ASC;
+
+-- order per month
+SELECT
+	MONTHNAME(sale_date), count(sale_id)
+FROM sale  
+GROUP BY MONTHNAME(sale_date)
+ORDER BY count(sale_id) DESC;
+
+-- Stored procedure to get number of order per season
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
+	IN four_season VARCHAR(25)
+)
+BEGIN
+	SELECT p.category, COUNT(p.category) as num_order
+	FROM sale_item si
+	JOIN sale s 
+		ON si.sale_id = s.sale_id
+	JOIN product p 
+		ON si.product_id = p.productid
+    WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = four_season
+	GROUP BY p.category;
+
+	
+END
+
+-- season function
+CREATE DEFINER=`root`@`localhost` FUNCTION `SALE_SEASON`(
+	MONTH VARCHAR(20)
+    ) RETURNS varchar(20) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
