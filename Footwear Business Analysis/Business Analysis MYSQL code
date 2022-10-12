@@ -130,18 +130,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- grade of customer
-SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
-		SUM(si.sale_price) as total_purchased_price,
-        customergrade(SUM(si.sale_price)) as customlevel
-FROM customer c JOIN sale s
-		ON c.customerid = s.customer_id 
-		JOIN sale_item si
-		ON s.sale_id = si.sale_id
-GROUP BY c.customerid
-ORDER BY customlevel;
-
--- Customer population
+-- Customer population and each cutomer level's ratio in total purchase
 
 WITH customgrade as (SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
 		SUM(si.sale_price) as total_purchased_price,
@@ -152,10 +141,12 @@ FROM customer c JOIN sale s
 		ON s.sale_id = si.sale_id
 GROUP BY c.customerid
 ORDER BY customlevel)
-SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl
-FROM customgrade
-GROUP BY customlevel;
 
+SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl, 
+    SUM(total_purchased_price) as total_price, 
+    SUM(total_purchased_price)/(SELECT SUM(sale_price) as s FROM sale_item) * 100 as ratio
+FROM customgrade
+Group by customlevel;
 
 
 -- Employee in purchasing department
