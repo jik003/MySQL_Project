@@ -4,6 +4,61 @@ FROM customer
 GROUP BY state
 ORDER BY num_customer DESC;
 
+-- city where employees live
+SELECT city, COUNT(city) as num_emp
+FROM employee
+GROUP BY city
+ORDER BY num_emp DESC;
+
+-- number of city where employees live
+SELECT COUNT(DISTINCT(city)) as num_city
+FROM employee;
+
+-- employee hiring trend per year
+SELECT YEAR(hiredate) as year, COUNT(employeeid) as num_emp
+FROM employee
+GROUP BY YEAR(hiredate)
+ORDER BY hiredate;
+
+
+-- items which are not in inventory
+SELECT * 
+FROM inventoryitem
+WHERE qtyonhand = 0;
+
+-- ratio of items are not in inventory
+SELECT (SELECT COUNT(productid) as s FROM inventoryitem WHERE qtyonhand = 0)/ COUNT(productid) as ratio_0_qty_item 
+FROM inventoryitem;
+
+-- inventory item 
+SELECT COUNT(productid) as num_0_qty
+FROM inventoryitem
+WHERE qtyonhand = 0;
+
+-- number of different size
+SELECT COUNT(DISTINCT(itemsize)) as num_size
+FROM inventoryitem;
+
+-- number of manufacturers
+SELECT count(manufacturerid) as num_man
+FROM manufacturer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- states' number of customers,orders and price per order
 SELECT state, COUNT(customerid) as num_customer, COUNT(s.sale_id) as num_order, SUM(si.sale_price) as total_price, SUM(si.sale_price)/COUNT(s.sale_id) as price_per_order
 FROM customer c JOIN sale s 
