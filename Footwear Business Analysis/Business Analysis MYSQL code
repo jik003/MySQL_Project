@@ -228,23 +228,6 @@ FROM sale
 GROUP BY MONTHNAME(sale_date)
 ORDER BY count(sale_id) DESC;
 
--- employee who puchased most
-SELECT 
-	employee.employeeid, COUNT(purchase_id)
-FROM employee
-JOIN purchase ON employee.employeeid = purchase.employee_id
-GROUP BY employee.employeeid
-ORDER BY COUNT(purchase_id) DESC
-LIMIT 1;
-
--- most sold item, purchased item
-SELECT 
-	pi.product_id, COUNT(pi.product_id)
-FROM purchase_item pi
-JOIN purchase p ON pi.purchase_id = p.purchase_id
-GROUP BY pi.product_id
-ORDER BY COUNT(pi.product_id) DESC;
-
 -- Stored procedure to get number of order per season
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
 	IN four_season VARCHAR(25)
