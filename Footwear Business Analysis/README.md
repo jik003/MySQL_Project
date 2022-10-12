@@ -61,6 +61,6 @@ The customers from Montana and Rhode Island tend to chose the basic shipping opt
 According to the graph 'Top Eight Categories per Season’, the most ordered product is ‘sneakers' regardless of the seasons. In Addition, the top eight products have been ordered most during summer. Hence the graph may conclude that summer is best selling season. However, the graph ’Number of Sale per Month’ shows that winter is the best selling season. Therefore we can conclude that non-best selling products are also fatal to the high sales performance.
 
 ### Purchasing employee
-<img src = "Graph/Employees who purchased product.png" width="700" height="400">
+<img src = "Graph/Employees who purchased product.png" width="300" height="100">
 Among 21 employees in the company, we wnanted to find who are in charge of purchasing products.
 Based on the code, we could find only 3 designated people purchased product. First we assumed that these 3 people were in purchasing department, however, all 3 people had 3 different manager id which means they were in different department. 
