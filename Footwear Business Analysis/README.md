@@ -22,7 +22,7 @@ Dataset: https://download.data.world/datapackage/thegove/redcat
 We first started analysis on single tables before going deep using multiple tables.
 
 Cusotmer table
-<img src = "Number of Customer per State.png" width="1000" height="400">
+<img src = "Graph/Number of Customer per State.png" width="1000" height="400">
 There were total 4371 customers since this footwear business started. We organized number of customers per state. Based on the number of customers, business can detmine which area to focus the advertisement and which area to withdraw.
 
 Employee table
