@@ -1,4 +1,45 @@
+# MySQL project
+Authors: Wooyoung Jeong and Jisu Kim
+
+# Research Questions
+1. 
+2. 
+
 
 # Footwear Business Analysis (Project_2) Abstract
 In this data set, there is randomly generated data for merchandizing company. There are total 10 tables that have customer, employee, product and other infomration. Based on the relationship between tables, we wrote the code that can analyze the trend of the business including hidden deparment information about employee department.
+
+# Countries States Cities DataBase
+Dataset: https://download.data.world/datapackage/thegove/redcat
+
+# Schemas Roadmap
+
+# Sample MYSQL code
+
+#Results
+
+1. Analysis on single table.
+We first started analysis on single tables before going deep using multiple tables.
+
+Cusotmer table
+<img src = "Number of Customer per State.png" width="1000" height="400">
+There were total 4371 customers since this footwear business started. We organized number of customers per state. Based on the number of customers, business can detmine which area to focus the advertisement and which area to withdraw.
+
+Employee table
+<img src = "Employee hired per year.png" width="1000" height="400">
+In employee table, number of cities where employees live and the name of cities can be found.
+Also the hiring trend of the company was noticeable. Company was established in 2005, but after hiring a few people until 2010, they are keep reducing hire.
+
+Ivnentory item table
+we could find number of items that are not in inventory. Based on this information, we were able to find only 0.3% of products were not in inventory, which shows good status of inventory. Also, number of shoe sizes were able to find, too.
+
+Product table
+<img src = "Number of product based on gender.png" width="1000" height="400">
+In product table, general information such as number of total product, number of items based on gender and items based on categories were able to find. There were slightly more male item compare to female item and the sneakers were very dominant in cateogy based table.
+
+Purchase table
+
+In purchase table, we found that purchasing items started on 2014. Based on the information employees were started to get hired since 2000 and stopped at 2013, but sale started on 2014. This can be mean that there was very long period of time to start the actual business. Also, the number of items per manufacturers were very even which means item were very diversed in this footwear business.
+
+
 
