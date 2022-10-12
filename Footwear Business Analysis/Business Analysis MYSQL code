@@ -214,3 +214,69 @@ BEGIN
     
     
 END
+
+-- customer with order date (sort)
+SELECT *
+FROM customer 
+INNER JOIN sale ON customer.customerid = sale.customer_id
+ORDER BY sale.sale_date ASC;
+
+-- order per month
+SELECT
+	MONTHNAME(sale_date), count(sale_id)
+FROM sale  
+GROUP BY MONTHNAME(sale_date)
+ORDER BY count(sale_id) DESC;
+
+-- employee who puchased most
+SELECT 
+	employee.employeeid, COUNT(purchase_id)
+FROM employee
+JOIN purchase ON employee.employeeid = purchase.employee_id
+GROUP BY employee.employeeid
+ORDER BY COUNT(purchase_id) DESC
+LIMIT 1;
+
+-- most sold item, purchased item
+SELECT 
+	pi.product_id, COUNT(pi.product_id)
+FROM purchase_item pi
+JOIN purchase p ON pi.purchase_id = p.purchase_id
+GROUP BY pi.product_id
+ORDER BY COUNT(pi.product_id) DESC;
+
+-- Stored procedure to get number of order per season
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
+	IN four_season VARCHAR(25)
+)
+BEGIN
+	SELECT p.category, COUNT(p.category) as num_order
+	FROM sale_item si
+	JOIN sale s 
+		ON si.sale_id = s.sale_id
+	JOIN product p 
+		ON si.product_id = p.productid
+    WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = four_season
+	GROUP BY p.category;
+
+	
+END
+
+-- season function
+CREATE DEFINER=`root`@`localhost` FUNCTION `SALE_SEASON`(
+	MONTH VARCHAR(20)
+    ) RETURNS varchar(20) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
