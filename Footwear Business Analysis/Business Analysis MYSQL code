@@ -43,21 +43,61 @@ FROM inventoryitem;
 SELECT count(manufacturerid) as num_man
 FROM manufacturer;
 
+-- number of total product
+SELECT COUNT(productid)
+FROM product;
+
+-- item based on gender
+SELECT gender, COUNT(productid) num_product
+FROM product
+GROUP BY gender;
+
+-- item based on category
+SELECT category, COUNT(productid) as num_product
+FROM product
+GROUP BY category
+ORDER BY num_product DESC;
+
+-- average shipping price
+SELECT avg(shipping)
+FROM purchase;
 
 
+-- number of purchase per year
+SELECT YEAR(purchase_date) as year , COUNT(purchase_id) num_purchased
+FROM purchase
+GROUP BY YEAR(purchase_date)
+ORDER BY purchase_date;   
 
+-- most purchased manufacuteres
+SELECT manufacturer_id, count(purchase_id) as num_purchased
+FROM purchase
+GROUP BY manufacturer_id
+ORDER BY num_purchased DESC;
 
+-- total number of purchase
+SELECT COUNT(purchase_id) as num_purhcased
+FROM purchase_item;
 
+-- most purchased product
+SELECT product_id, COUNT(purchase_id) as num_purchased
+FROM purchase_item
+GROUP BY product_id
+ORDER BY num_purchased DESC;
 
+-- average quantity of purchased product
+SELECT AVG(quantity) as average_qty_purchased
+FROM purchase_item;
 
+-- number of sale per year
+SELECT YEAR(sale_date) as year, COUNT(sale_id) num_sale
+FROM sale
+GROUP BY YEAR(sale_date)
+ORDER BY sale_date;
 
-
-
-
-
-
-
-
+-- average sale price
+SELECT avg(sale_price) as avg_price, MIN(sale_price) as lowest_price, Max(sale_price) as highest_price
+FROM sale_item;
 
 -- states' number of customers,orders and price per order
 SELECT state, COUNT(customerid) as num_customer, COUNT(s.sale_id) as num_order, SUM(si.sale_price) as total_price, SUM(si.sale_price)/COUNT(s.sale_id) as price_per_order
