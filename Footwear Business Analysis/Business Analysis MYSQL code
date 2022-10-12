@@ -188,10 +188,10 @@ ORDER BY num_sale DESC;
 
 -- employee who puchased most
 SELECT 
-	employee.employeeid, COUNT(purchase_id) as num_purchased
-FROM employee
-JOIN purchase ON employee.employeeid = purchase.employee_id
-GROUP BY employee.employeeid
+	CONCAT(e.firstname, ' ', e.lastname) as name, e.employeeid, COUNT(purchase_id) as num_purchased, e.managerid
+FROM employee e
+JOIN purchase p ON e.employeeid = p.employee_id
+GROUP BY e.employeeid
 ORDER BY COUNT(purchase_id) DESC;
 
 -- most purchased item
