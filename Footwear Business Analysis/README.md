@@ -49,8 +49,12 @@ In sale table, meaningful information was able to find. First sale started on 20
 Sale item table
 In sale item table, we could not find any important analytic results. We calculated minimum and maximum product price.
 
+### Average Shipping Price per State
+<img src = "Graph/Average Shipping Price per State.png" width="700" height="400">
+The customers from Montana and Rhode Island tend to chose the basic shipping option(the least expensive shipment). 
+
 ### Number of Sale per Month && Top Eight Categories per Season
-<img src = "Graph/Number of Sale per Month.png" width="1000" height="400">
-<img src = "Graph/Top Eight Categories per Season.png" width="1000" height="400">
+<img src = "Graph/Number of Sale per Month.png" width="700" height="400">
+<img src = "Graph/Top Eight Categories per Season.png" width="700" height="400">
 According to the graph 'Top Eight Categories per Season’, the most ordered product is ‘sneakers' regardless of the seasons. In Addition, the top eight products have been ordered most during summer. Hence the graph may conclude that summer is best selling season. However, the graph ’Number of Sale per Month’ shows that winter is the best selling season. Therefore we can conclude that non-best selling products are also fatal to the high sales performance.
 
