@@ -41,5 +41,8 @@ Purchase table
 
 In purchase table, we found that purchasing items started on 2014. Based on the information employees were started to get hired since 2000 and stopped at 2013, but sale started on 2014. This can be mean that there was very long period of time to start the actual business. Also, the number of items per manufacturers were very even which means item were very diversed in this footwear business.
 
-
+Number of Sale per Month && Top Eight Categories per Season
+<img src = "Graph/Number of Sale per Month.png" width="1000" height="400">
+<img src = "Graph/Top Eight Categories per Season.png" width="1000" height="400">
+According to the graph 'Top Eight Categories per Season’, the most ordered product is ‘sneakers' regardless of the seasons. In Addition, the top eight products have been ordered most during summer. Hence the graph may conclude that summer is best selling season. However, the graph ’Number of Sale per Month’ shows that winter is the best selling season. Therefore we can conclude that non-best selling products are also fatal to the high sales performance.
 
