@@ -13,6 +13,7 @@ In this data set, there is randomly generated data for merchandizing company. Th
 Dataset: https://download.data.world/datapackage/thegove/redcat
 
 # Schemas Roadmap
+<img src = "Footwear Business Analysis.png" width="1000" height="400">
 
 # Sample MYSQL code
 ### Customer Grade Function
