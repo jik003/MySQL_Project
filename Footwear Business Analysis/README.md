@@ -166,7 +166,7 @@ Among 21 employees in the company, we wnanted to find who are in charge of purch
 Based on the code, we could find only 3 designated people purchased product. First we assumed that these 3 people were in purchasing department, however, all 3 people had 3 different manager id which means they were in different department. 
 
 ###
-<img src = "Graph/Customer Population.png" width="300" height="100">
+<img src = "Graph/Customer Population.png" width="700" height="400">
 Before we make this graph, we determined customers to
 'A' : spent more than 1000
 'B' : spent between 500 to 1000
