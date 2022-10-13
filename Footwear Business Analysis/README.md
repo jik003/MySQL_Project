@@ -65,6 +65,59 @@ CALL CATEGORY_SEASON('Winter')
 ```
 Get the number of order of each product during Winter
 
+
+'''SQL
+-- CUSTOMER LEVEL FUNCTION
+DELIMITER $$ 
+
+CREATE FUNCTION CUSTOMERGRADE(
+	total_purchased_price DECIMAL(10,2)
+    )
+RETURNS VARCHAR(20)
+DETERMINISTIC
+BEGIN
+	DECLARE customergrade VARCHAR(20);
+    If total_purchased_price > 1000 THEN
+		SET customergrade = 'A';
+	ELSEIF (total_purchased_price <= 1000 AND
+				total_purchased_price > 500) THEN
+		SET customergrade = 'B';
+	ELSEIF total_purchased_price <= 500 THEN
+		SET customergrade = 'C';
+	END IF;
+		RETURN (customergrade);
+END $$
+DELIMITER ;
+
+-- grade of customer
+SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+FROM customer c JOIN sale s
+		ON c.customerid = s.customer_id 
+		JOIN sale_item si
+		ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY customlevel;
+
+-- Customer population and info
+
+WITH customgrade as (SELECT CONCAT(c.firstname, ' ', c.lastname) as name, 
+		SUM(si.sale_price) as total_purchased_price,
+        customergrade(SUM(si.sale_price)) as customlevel
+FROM customer c JOIN sale s
+		ON c.customerid = s.customer_id 
+		JOIN sale_item si
+		ON s.sale_id = si.sale_id
+GROUP BY c.customerid
+ORDER BY customlevel)
+
+SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl, 
+    SUM(total_purchased_price) as total_price, 
+    SUM(total_purchased_price)/(SELECT SUM(sale_price) as s FROM sale_item) * 100 as ratio
+FROM customgrade
+Group by customlevel;
+'''
 # Results
 
 1. Analysis on single table.
