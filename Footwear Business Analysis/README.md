@@ -165,6 +165,15 @@ According to the graph 'Top Eight Categories per Season’, the most ordered pro
 Among 21 employees in the company, we wnanted to find who are in charge of purchasing products.
 Based on the code, we could find only 3 designated people purchased product. First we assumed that these 3 people were in purchasing department, however, all 3 people had 3 different manager id which means they were in different department. 
 
+###
+<img src = "Graph/Customer Population.png" width="300" height="100">
+Before we make this graph, we determined customers to
+'A' : spent more than 1000
+'B' : spent between 500 to 1000
+'C' : spent less than 500.
+We distributed the population of custoemrs.
+With distribution we could also get ration of each level of customers' spent money. (A - 8.19%, B - 25.58%, C - 65.43%)
+Therefore we could get the importance of each customer level.
 
 # Conclusion
 
