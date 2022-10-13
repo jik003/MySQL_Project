@@ -113,3 +113,8 @@ According to the graph 'Top Eight Categories per Season’, the most ordered pro
 <img src = "Graph/Employees who purchased product.png" width="300" height="100">
 Among 21 employees in the company, we wnanted to find who are in charge of purchasing products.
 Based on the code, we could find only 3 designated people purchased product. First we assumed that these 3 people were in purchasing department, however, all 3 people had 3 different manager id which means they were in different department. 
+
+
+# Conclusion
+
+Based on the information on the randomly generated, we could analyze the trend of simulated footwear business. This business was estabilshed on 2000 and now have 21 employees. With 21 employees, they started footwear sale business on 2014. For their first few orders, they tend to purchase after receive order. However, they built 191734 pairs of shoes ininventory system during two years with only 0.3% of missing products in inventory. Their main portion of sale is sneakers and has highest sale on December. We have graded customer who spend more than 1000 as 'A', between 500 and 1000 as 'B', and below 500 as 'C'. In 4371 customers, there are only 1.7% of 'A' customers. However, 1.7% of customers spent 8.19% of total cusotomer's spent money. 
