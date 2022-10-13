@@ -2,9 +2,9 @@
 Authors: Wooyoung Jeong and Jisu Kim
 
 # Research Questions
-1. 
-2. 
-
+1. To grow the business, which state to focus the advertisement
+2. Analysis on growth rate of the business based on the employeement and the order rate
+3. What are the features of the different types of ordered product per each season
 
 # Footwear Business Analysis (Project_2) Abstract
 In this data set, there is randomly generated data for merchandizing company. There are total 10 tables that have customer, employee, product and other infomration. Based on the relationship between tables, we wrote the code that can analyze the trend of the business including hidden deparment information about employee department.
@@ -15,6 +15,55 @@ Dataset: https://download.data.world/datapackage/thegove/redcat
 # Schemas Roadmap
 
 # Sample MYSQL code
+Customer Grade Function
+```SQL
+
+```
+
+### Sale Season Function
+```SQL 
+CREATE DEFINER=`root`@`localhost` FUNCTION `SALE_SEASON`(
+	MONTH VARCHAR(20)
+    ) RETURNS varchar(20) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
+```
+Set the four seasons
+
+### Number of Order Seasons Procedure
+```SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
+	IN four_season VARCHAR(25)
+)
+BEGIN
+	SELECT p.category, COUNT(p.category) as num_order
+	FROM sale_item si
+	JOIN sale s 
+		ON si.sale_id = s.sale_id
+	JOIN product p 
+		ON si.product_id = p.productid
+    WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = four_season
+	GROUP BY p.category;
+
+	
+END
+```
+```SQL
+CALL CATEGORY_SEASON('Winter')
+```
+Get the number of order of each product during Winter
 
 # Results
 
