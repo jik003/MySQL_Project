@@ -15,58 +15,8 @@ Dataset: https://download.data.world/datapackage/thegove/redcat
 # Schemas Roadmap
 
 # Sample MYSQL code
-Customer Grade Function
+### Customer Grade Function
 ```SQL
-
-```
-
-### Sale Season Function
-```SQL 
-CREATE DEFINER=`root`@`localhost` FUNCTION `SALE_SEASON`(
-	MONTH VARCHAR(20)
-    ) RETURNS varchar(20) CHARSET utf8mb4
-    DETERMINISTIC
-BEGIN
-	DECLARE sale_season VARCHAR(20);
-	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
-      SET sale_season = 'Spring';
-	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
-      SET sale_season = 'Summer';
-	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
-      SET sale_season = 'Fall';
-	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
-      SET sale_season = 'Winter';
-	END IF;
-RETURN sale_season;
-END
-```
-Set the four seasons
-
-### Number of Order Seasons Procedure
-```SQL
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
-	IN four_season VARCHAR(25)
-)
-BEGIN
-	SELECT p.category, COUNT(p.category) as num_order
-	FROM sale_item si
-	JOIN sale s 
-		ON si.sale_id = s.sale_id
-	JOIN product p 
-		ON si.product_id = p.productid
-    WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = four_season
-	GROUP BY p.category;
-
-	
-END
-```
-```SQL
-CALL CATEGORY_SEASON('Winter')
-```
-Get the number of order of each product during Winter
-
-
-'''SQL
 -- CUSTOMER LEVEL FUNCTION
 DELIMITER $$ 
 
@@ -117,7 +67,54 @@ SELECT DISTINCT(customlevel), COUNT(customlevel) as num_ppl,
     SUM(total_purchased_price)/(SELECT SUM(sale_price) as s FROM sale_item) * 100 as ratio
 FROM customgrade
 Group by customlevel;
-'''
+```
+
+### Sale Season Function
+```SQL 
+CREATE DEFINER=`root`@`localhost` FUNCTION `SALE_SEASON`(
+	MONTH VARCHAR(20)
+    ) RETURNS varchar(20) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+	DECLARE sale_season VARCHAR(20);
+	If (MONTH = 'March' OR MONTH = 'April' OR MONTH = 'May') THEN
+      SET sale_season = 'Spring';
+	ELSEIF (MONTH = 'June' OR MONTH = 'July'OR MONTH = 'August') THEN
+      SET sale_season = 'Summer';
+	ELSEIF (MONTH = 'September' OR MONTH = 'October'OR MONTH = 'November') THEN
+      SET sale_season = 'Fall';
+	ELSEIF (MONTH = 'December' OR MONTH = 'January'OR MONTH = 'February') THEN
+      SET sale_season = 'Winter';
+	END IF;
+RETURN sale_season;
+END
+```
+Set the four seasons
+
+### Number of Order Seasons Procedure
+```SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CATEGORY_SEASON`(
+	IN four_season VARCHAR(25)
+)
+BEGIN
+	SELECT p.category, COUNT(p.category) as num_order
+	FROM sale_item si
+	JOIN sale s 
+		ON si.sale_id = s.sale_id
+	JOIN product p 
+		ON si.product_id = p.productid
+    WHERE SALE_SEASON(MONTHNAME(s.sale_date)) = four_season
+	GROUP BY p.category;
+
+	
+END
+```
+```SQL
+CALL CATEGORY_SEASON('Winter')
+```
+Get the number of order of each product during Winter
+
+
 # Results
 
 1. Analysis on single table.
